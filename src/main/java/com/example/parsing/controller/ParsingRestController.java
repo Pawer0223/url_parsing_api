@@ -20,7 +20,6 @@ public class ParsingRestController {
 
     @PostMapping("/parsing")
     public ResponseEntity parsing_api(@Valid FormData formData) {
-        log.info(formData.toString());
         return ResponseEntity.ok(success(parsingService.getUrlData(formData)));
     }
 }

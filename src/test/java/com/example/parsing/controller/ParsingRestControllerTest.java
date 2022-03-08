@@ -59,4 +59,111 @@ class ParsingRestControllerTest {
         ;
     }
 
+    @Test
+    public void api_호출_잘못된_URL() throws Exception {
+        // given, when
+        mockMvc.perform(post("/parsing")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("url", "")
+                .param("type", "1")
+                .param("unit", "30"))
+                .andDo(print())
+                //then
+                .andExpect(status().isBadRequest())
+        ;
+    }
+
+    @Test
+    public void api_호출_잘못된_type_입력() throws Exception {
+        // given, when
+        mockMvc.perform(post("/parsing")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_JSON)
+                //.param("url", "https://naver.com")
+                .param("url", "https://naver.com")
+                .param("type", "0")
+                .param("unit", "100"))
+                .andDo(print())
+                //then
+                .andExpect(status().isBadRequest())
+        ;
+        // given, when
+        mockMvc.perform(post("/parsing")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_JSON)
+                //.param("url", "https://naver.com")
+                .param("url", "https://naver.com")
+                .param("type", "-1")
+                .param("unit", "100"))
+                .andDo(print())
+                //then
+                .andExpect(status().isBadRequest())
+        ;
+        // given, when
+        mockMvc.perform(post("/parsing")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_JSON)
+                //.param("url", "https://naver.com")
+                .param("url", "https://naver.com")
+                .param("type", "1000000")
+                .param("unit", "100"))
+                .andDo(print())
+                //then
+                .andExpect(status().isBadRequest())
+        ;
+        // given, when
+        mockMvc.perform(post("/parsing")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_JSON)
+                //.param("url", "https://naver.com")
+                .param("url", "https://naver.com")
+                .param("type", "aaa")
+                .param("unit", "100"))
+                .andDo(print())
+                //then
+                .andExpect(status().isBadRequest())
+        ;
+    }
+
+    @Test
+    public void api_호출_잘못된_unit_입력() throws Exception {
+        // given, when
+        mockMvc.perform(post("/parsing")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_JSON)
+                //.param("url", "https://naver.com")
+                .param("url", "https://naver.com")
+                .param("type", "1")
+                .param("unit", "0"))
+                .andDo(print())
+                //then
+                .andExpect(status().isBadRequest())
+        ;
+        // given, when
+        mockMvc.perform(post("/parsing")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_JSON)
+                //.param("url", "https://naver.com")
+                .param("url", "https://naver.com")
+                .param("type", "1")
+                .param("unit", "-1"))
+                .andDo(print())
+                //then
+                .andExpect(status().isBadRequest())
+        ;
+        // given, when
+        mockMvc.perform(post("/parsing")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_JSON)
+                //.param("url", "https://naver.com")
+                .param("url", "https://naver.com")
+                .param("type", "1")
+                .param("unit", "a3"))
+                .andDo(print())
+                //then
+                .andExpect(status().isBadRequest())
+        ;
+    }
+
 }

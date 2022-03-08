@@ -38,8 +38,24 @@ class ParsingRestControllerTest {
         .andDo(print())
         //then
         .andExpect(status().isOk())
-        .andExpect(jsonPath("content").exists())
-        .andExpect(jsonPath("remain").exists())
+        .andExpect(jsonPath("success").exists())
+        .andExpect(jsonPath("response").exists())
+        ;
+    }
+
+    @Test
+    public void api_호출_잘못된_URL_호출() throws Exception {
+        // given, when
+        mockMvc.perform(post("/parsing")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_JSON)
+                //.param("url", "https://naver.com")
+                .param("url", "https://aaa")
+                .param("type", "1")
+                .param("unit", "30"))
+                .andDo(print())
+                //then
+                .andExpect(status().isBadRequest())
         ;
     }
 

@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -31,8 +30,7 @@ class ParsingRestControllerTest {
         mockMvc.perform(post("/parsing")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
-                //.param("url", "https://naver.com")
-                .param("url", "https://naver.com")
+                 .param("url", "https://naver.com")
                 .param("type", "1")
                 .param("unit", "30"))
         .andDo(print())

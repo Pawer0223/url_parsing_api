@@ -4,13 +4,14 @@ import com.example.parsing.domain.FormData;
 import com.example.parsing.domain.ParsingDto;
 import org.springframework.stereotype.Service;
 
-import static com.example.parsing.utils.ParsingUtils.getData;
-import static com.example.parsing.utils.ParsingUtils.getParsingDto;
+import static com.example.parsing.utils.ParsingUtils.*;
 
 @Service
 public class ParsingService {
-    public ParsingDto getUrlData(FormData formData) {
-        String data = getData(formData.getUrl(), formData.getType());
-        return getParsingDto(data, formData.getUnit());
+
+    public ParsingDto parse(FormData formData) {
+        String data = getUrlData(formData.getUrl());
+        data = parsing(data, formData.getType());
+        return divideUnit(data, formData.getUnit());
     }
 }

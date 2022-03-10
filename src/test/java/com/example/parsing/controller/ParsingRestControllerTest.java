@@ -1,8 +1,9 @@
 package com.example.parsing.controller;
 
-import com.example.parsing.domain.FormData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,14 +42,21 @@ class ParsingRestControllerTest {
         ;
     }
 
-    @Test
-    public void api_호출_잘못된_URL_호출() throws Exception {
+    private static Object[] provideForTestWrongUrl() {
+        return new Object[]{
+                new Object[]{"https://aaa"},
+                new Object[]{"aaa"},
+                new Object[]{"https://nave1r.com"},
+        };
+    }
+    @ParameterizedTest()
+    @MethodSource("provideForTestWrongUrl")
+    public void api_호출_잘못된_URL_호출(String url) throws Exception {
         // given, when
         mockMvc.perform(post("/parsing")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
-                //.param("url", "https://naver.com")
-                .param("url", "https://aaa")
+                .param("url", url)
                 .param("type", "1")
                 .param("unit", "30"))
                 .andDo(print())
@@ -57,66 +65,24 @@ class ParsingRestControllerTest {
         ;
     }
 
-    @Test
-    public void api_호출_잘못된_URL() throws Exception {
-        // given, when
-        mockMvc.perform(post("/parsing")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .accept(MediaType.APPLICATION_JSON)
-                .param("url", "")
-                .param("type", "1")
-                .param("unit", "30"))
-                .andDo(print())
-                //then
-                .andExpect(status().isBadRequest())
-        ;
-    }
+    private static Object[] provideForTestWrongType() {
+        return new Object[]{
+                new Object[]{"0"},
+                new Object[]{"-1"},
+                new Object[]{"1000000"},
+                new Object[]{"aaa"},
 
-    @Test
-    public void api_호출_잘못된_type_입력() throws Exception {
+        };
+    }
+    @ParameterizedTest()
+    @MethodSource("provideForTestWrongType")
+    public void api_호출_잘못된_type_입력(String type) throws Exception {
         // given, when
         mockMvc.perform(post("/parsing")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
-                //.param("url", "https://naver.com")
                 .param("url", "https://naver.com")
-                .param("type", "0")
-                .param("unit", "100"))
-                .andDo(print())
-                //then
-                .andExpect(status().isBadRequest())
-        ;
-        // given, when
-        mockMvc.perform(post("/parsing")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .accept(MediaType.APPLICATION_JSON)
-                //.param("url", "https://naver.com")
-                .param("url", "https://naver.com")
-                .param("type", "-1")
-                .param("unit", "100"))
-                .andDo(print())
-                //then
-                .andExpect(status().isBadRequest())
-        ;
-        // given, when
-        mockMvc.perform(post("/parsing")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .accept(MediaType.APPLICATION_JSON)
-                //.param("url", "https://naver.com")
-                .param("url", "https://naver.com")
-                .param("type", "1000000")
-                .param("unit", "100"))
-                .andDo(print())
-                //then
-                .andExpect(status().isBadRequest())
-        ;
-        // given, when
-        mockMvc.perform(post("/parsing")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .accept(MediaType.APPLICATION_JSON)
-                //.param("url", "https://naver.com")
-                .param("url", "https://naver.com")
-                .param("type", "aaa")
+                .param("type", type)
                 .param("unit", "100"))
                 .andDo(print())
                 //then
@@ -124,43 +90,51 @@ class ParsingRestControllerTest {
         ;
     }
 
-    @Test
-    public void api_호출_잘못된_unit_입력() throws Exception {
+    private static Object[] provideForTestWrongUnit() {
+        return new Object[]{
+                new Object[]{"-1"},
+                new Object[]{"aaa3"},
+                new Object[]{"0"},
+        };
+    }
+    @ParameterizedTest()
+    @MethodSource("provideForTestWrongUnit")
+    public void api_호출_잘못된_unit_입력(String unit) throws Exception {
         // given, when
         mockMvc.perform(post("/parsing")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
-                //.param("url", "https://naver.com")
                 .param("url", "https://naver.com")
                 .param("type", "1")
-                .param("unit", "0"))
+                .param("unit", unit))
                 .andDo(print())
                 //then
                 .andExpect(status().isBadRequest())
         ;
+    }
+
+
+    private static Object[] provideForTestController() {
+        return new Object[]{
+                new Object[]{"https://naver.com", "1", "100"},
+                new Object[]{"https://google.com", "2", "30"},
+                new Object[]{"https://okky.kr/articles/gathering", "1", "50"},
+        };
+    }
+
+    @ParameterizedTest()
+    @MethodSource("provideForTestController")
+    public void 파싱_테스트(String url, String type, String unit) throws Exception {
         // given, when
         mockMvc.perform(post("/parsing")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
-                //.param("url", "https://naver.com")
-                .param("url", "https://naver.com")
-                .param("type", "1")
-                .param("unit", "-1"))
+                .param("url", url)
+                .param("type", type)
+                .param("unit", unit))
                 .andDo(print())
                 //then
-                .andExpect(status().isBadRequest())
-        ;
-        // given, when
-        mockMvc.perform(post("/parsing")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .accept(MediaType.APPLICATION_JSON)
-                //.param("url", "https://naver.com")
-                .param("url", "https://naver.com")
-                .param("type", "1")
-                .param("unit", "a3"))
-                .andDo(print())
-                //then
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
         ;
     }
 

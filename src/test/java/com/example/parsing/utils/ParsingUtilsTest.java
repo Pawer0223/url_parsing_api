@@ -11,16 +11,39 @@ class ParsingUtilsTest {
 
     private static Object[] provideForTestParsing() {
         return new Object[]{
+                new Object[]{"AAAAAAA", 1, "AAAAAAA"},
+                new Object[]{"1111111", 1, "1111111"},
+                new Object[]{"AaZc111111111111", 1, "A1a1c1Z111111111"},
+                new Object[]{"123aaaaAaaaaaa", 1, "A1a2a3aaaaaaaa"},
                 new Object[]{"<div><h1>hi</h1></div>", 1, "hi"},
                 new Object[]{"<div><h1>hi</h1></div>", 2, "d1d1hhhiiivv"},
                 new Object[]{"<a href=\"https://www.nAver.com\">네이버로</a>", 1, ""},
                 new Object[]{"<a href=\"https://www.nAver.com\">2네이3버로1</a>", 2, "A1a2a3ceefhhmnoprrsttvwww"},
-                new Object[]{"<h1>&lt;h1&gt;hi&lt;&#47;h1&gt;</h1>", 1, "g1g1h4h7hilltttt"},
+                new Object[]{"<h1>&lt;h1&gt;hi&lt;&#47;h1&gt;</h1>", 1, "h1h1hi"},
                 new Object[]{"zyxwvutsrqponmlkjihgfedcba", 1, "abcdefghijklmnopqrstuvwxyz"},
                 new Object[]{"9876543210", 2, "0123456789"},
                 new Object[]{"ZYXWVUTSRQPONMLKJIHGFEDCBA", 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ"},
                 new Object[]{"zyxZYX987", 1, "X7x8Y9yZz"},
                 new Object[]{"7X8zYyxZ9", 2, "X7x8Y9yZz"},
+                new Object[]{
+                        "<head>\n" +
+                        "    <meta charset=\"UTF-8\">\n" +
+                        "    <title>한국어</title>\n" +
+                        "</head>\n" +
+                        "<body>\n" +
+                        "\n" +
+                        "    <div>\n" +
+                        "        <span>AB</span>\n" +
+                        "        <span>ab</span>\n" +
+                        "    </div>\n" +
+                        "    <div>\n" +
+                        "        <span>12</span>\n" +
+                        "    </div>\n" +
+                        "\n" +
+                        "</body>\n" +
+                        "</html>",
+                        1, "A1a2Bb"
+                }
         };
     }
 
@@ -29,10 +52,8 @@ class ParsingUtilsTest {
     public void parsing_basic_test(String data, int type, String expect) { //given
         //when
         String actual = ParsingUtils.parsing(data, type);
-//        log.debug("======= ======= ======= test ======= ======= =======");
-//        log.debug("before : {}", data);
-//        log.debug("after : {}", actual);
-        log.debug(actual);
+        log.debug("======= ======= ======= test ======= ======= =======");
+        log.debug("before : {}, after : {}", data, actual);
         //then
         Assertions.assertEquals(expect, actual);
     }
@@ -65,9 +86,10 @@ class ParsingUtilsTest {
     public void divide_basic_test(String data, int unit, String expectContent, String expectRemain) { //given
         //when
         ParsingDto parsingDto = ParsingUtils.divideUnit(data, unit);
-        log.debug("======= ======= ======= test ======= ======= =======");
-        log.debug("before : {}", data);
-        log.debug("after : {}", parsingDto);
+        log.debug("======= ======= ======= before ======= ======= =======");
+        log.debug(data);
+        log.debug("======= ======= ======= after ======= ======= =======");
+        log.debug(parsingDto.toString());
         //then
         Assertions.assertEquals(expectContent, parsingDto.getContent());
         Assertions.assertEquals(expectRemain, parsingDto.getRemain());

@@ -1,5 +1,6 @@
 package com.example.parsing.domain;
 
+import io.swagger.models.auth.In;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
@@ -12,6 +13,6 @@ public class FormData {
     private String url;
     @Range(min = 1, max = 2, message = "Type 1(remove tag) or 2(all) only")
     private int type;
-    @Range(min = 1l, message = "Unit Please a number greater than 1")
+    @Range(min = 1, max = 10000000, message = "Unit Please a number greater than 1 and less than 1000000")
     private int unit;
 }

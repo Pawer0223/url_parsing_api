@@ -13,6 +13,7 @@ class ParsingUtilsTest {
         return new Object[]{
                 new Object[]{"AAAAAAA", 1, "AAAAAAA"},
                 new Object[]{"1111111", 1, "1111111"},
+                new Object[]{"ABCabc123456", 1, "A1a2B3b4C5c6"},
                 new Object[]{"AaZc111111111111", 1, "A1a1c1Z111111111"},
                 new Object[]{"123aaaaAaaaaaa", 1, "A1a2a3aaaaaaaa"},
                 new Object[]{"<div><h1>hi</h1></div>", 1, "hi"},

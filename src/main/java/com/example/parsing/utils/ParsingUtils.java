@@ -1,21 +1,17 @@
 package com.example.parsing.utils;
 
 import com.example.parsing.domain.ParsingDto;
+import com.example.parsing.errors.UrlConnectException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.LaxRedirectStrategy;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.web.client.RestTemplate;
-
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 public class ParsingUtils {
-    private static final String TAG_REGX = "<(/)?([a-zA-Z0-9]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>";
 
     private static String getCrossString(List<Character> numberList, List<Character> alphabetList) {
         StringBuffer sb = new StringBuffer();
@@ -47,8 +43,10 @@ public class ParsingUtils {
 
     // 영어, 숫자, 오름차순, 교차 출력
     public static String parsing(String data, int type) {
-        if (type == 1)
-            data = data.replaceAll(TAG_REGX, "");
+        if (type == 1) {
+            log.debug("html remove");
+            data = Jsoup.parse(data).text();
+        }
         List<Character> numberList = new ArrayList<>();
         List<Character> alphabetList = new ArrayList<>();
         for (int i = 0; i < data.length(); i++) {
@@ -72,16 +70,16 @@ public class ParsingUtils {
         return getCrossString(numberList, alphabetList);
     }
 
-    public static String getUrlData(String url) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        HttpClient httpClient = HttpClientBuilder.create()
-                .setRedirectStrategy(new LaxRedirectStrategy())
-                .build();
-        factory.setHttpClient(httpClient);
-        restTemplate.setRequestFactory(factory);
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        log.debug("result content type : {}", response.getHeaders().getContentType().toString());
-        return response.getBody();
+    public static String getUrlDataJsoup(String url) {
+        String errMsg = " invalid URL";
+        try {
+            Document doc = Jsoup.connect(url).get();
+            return doc.toString();
+        } catch (IOException e) {
+            throw new UrlConnectException(url + errMsg);
+        } catch (IllegalArgumentException e) {
+            throw new UrlConnectException(url + errMsg);
+        }
     }
+
 }

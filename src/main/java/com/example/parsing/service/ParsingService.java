@@ -10,7 +10,7 @@ import static com.example.parsing.utils.ParsingUtils.*;
 public class ParsingService {
 
     public ParsingDto parse(FormData formData) {
-        String data = getUrlData(formData.getUrl());
+        String data = getUrlDataJsoup(formData.getUrl());
         data = parsing(data, formData.getType());
         return divideUnit(data, formData.getUnit());
     }

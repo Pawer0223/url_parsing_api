@@ -1,8 +1,8 @@
 package com.example.parsing.errors;
 
 import com.example.parsing.utils.ApiUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
@@ -20,9 +19,8 @@ import java.util.List;
 import static com.example.parsing.utils.ApiUtils.error;
 
 @ControllerAdvice
+@Slf4j
 public class GeneralExceptionHandler {
-
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private ResponseEntity<ApiUtils.ApiResult<?>> newResponse(Throwable throwable, HttpStatus status) {
         return newResponse(throwable.getMessage(), status);
@@ -45,11 +43,11 @@ public class GeneralExceptionHandler {
             IllegalArgumentException.class,
             IllegalStateException.class,
             MethodArgumentNotValidException.class,
-            ResourceAccessException.class,
+            UrlConnectException.class,
             BindException.class
     })
     public ResponseEntity<?> handleBadRequestException(Exception e) {
-        log.info("Bad request exception occurred: {}", e.getMessage());
+        log.debug("Bad request exception occurred: {}", e.getMessage());
         if (e instanceof MethodArgumentNotValidException) { // requestBody
             return newResponse(
                     ((MethodArgumentNotValidException)e).getBindingResult().getAllErrors().get(0).getDefaultMessage(),

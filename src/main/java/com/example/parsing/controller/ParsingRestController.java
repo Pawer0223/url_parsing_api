@@ -7,12 +7,17 @@ import com.example.parsing.utils.ApiUtils.ApiResult;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import java.io.IOException;
+
 import static com.example.parsing.utils.ApiUtils.success;
+import static com.example.parsing.utils.ParsingUtils.getUrlDataJsoup;
 
 @Api(tags = {"Parsing"})
 @RestController @RequiredArgsConstructor

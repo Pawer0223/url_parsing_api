@@ -1,6 +1,8 @@
 package com.example.parsing.controller;
 
+import com.example.parsing.domain.FormData;
 import com.example.parsing.domain.ParsingDto;
+import com.example.parsing.domain.ParsingType;
 import com.example.parsing.utils.DataParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -34,10 +36,11 @@ class ParsingRestControllerTest {
         mockMvc.perform(post("/parsing")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
-                 .param("url", "https://naver.com")
-                .param("type", "1")
+                .param("url", "https://naver.com")
+                .param("type", ParsingType.REMOVE_HTML.getValue())
                 .param("unit", "30"))
-        .andDo(print())
+                //.content(objectMapper.writeValueAsString(formData)))
+                .andDo(print())
         //then
         .andExpect(status().isOk())
         .andExpect(jsonPath("success").exists())
@@ -63,7 +66,7 @@ class ParsingRestControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
                 .param("url", url)
-                .param("type", "1")
+                .param("type", ParsingType.REMOVE_HTML.getValue())
                 .param("unit", "30"))
                 //.andDo(print())
                 //then
@@ -76,15 +79,16 @@ class ParsingRestControllerTest {
 
     private static Object[] provideForTestWrongType() {
         return new Object[]{
-                new Object[]{"0"},
+                new Object[]{"Hi"},
                 new Object[]{"-1"},
+                new Object[]{"0"},
+                new Object[]{"1"},
                 new Object[]{"1000000"},
         };
     }
     @ParameterizedTest()
     @MethodSource("provideForTestWrongType")
     public void api_호출_잘못된_type_입력(String type) throws Exception {
-        String errMsg = "Type 1(remove tag) or 2(all) only";
         // given, when
         mockMvc.perform(post("/parsing")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -93,7 +97,6 @@ class ParsingRestControllerTest {
                 .param("type", type)
                 .param("unit", "100"))
                 .andExpect(jsonPath("error.message").exists())
-                .andExpect(jsonPath("error.message").value(errMsg))
                 // .andDo(print())
                 //then
                 .andExpect(status().isBadRequest())
@@ -117,7 +120,7 @@ class ParsingRestControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
                 .param("url", "https://naver.com")
-                .param("type", "1")
+                .param("type", ParsingType.REMOVE_HTML.getValue())
                 .param("unit", unit))
                 .andExpect(jsonPath("error.message").exists())
                 .andExpect(jsonPath("error.message").value(errMsg))
@@ -178,7 +181,7 @@ class ParsingRestControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
                 .param("url", url)
-                .param("type", type)
+                .param("type", ParsingType.ALL_TEXT.name())
                 .param("unit", unit))
                 // .andDo(print())
                 //then

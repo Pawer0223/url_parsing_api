@@ -17,7 +17,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 import static com.example.parsing.utils.ApiUtils.success;
-import static com.example.parsing.utils.ParsingUtils.getUrlDataJsoup;
 
 @Api(tags = {"Parsing"})
 @RestController @RequiredArgsConstructor

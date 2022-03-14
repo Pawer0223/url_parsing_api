@@ -1,6 +1,9 @@
 package com.example.parsing.controller;
 
+import com.example.parsing.domain.ParsingDto;
+import com.example.parsing.utils.DataParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -182,5 +185,4 @@ class ParsingRestControllerTest {
                 .andExpect(status().isOk())
         ;
     }
-
 }

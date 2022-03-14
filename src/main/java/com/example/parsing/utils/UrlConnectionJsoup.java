@@ -1,5 +1,6 @@
 package com.example.parsing.utils;
 
+import com.example.parsing.domain.ParsingType;
 import com.example.parsing.errors.UrlConnectException;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -17,12 +18,12 @@ public class UrlConnectionJsoup {
         return Jsoup.parse(data).text();
     }
 
-    public String getUrlDataJsoup(String url, int type) {
+    public String getUrlDataJsoup(String url, String type) {
         String errMsg = " invalid URL";
         try {
             Document doc = Jsoup.connect(url).get();
             String data = doc.toString();
-            if (type == 1)
+            if (type.equals(ParsingType.REMOVE_HTML.getValue()))
                 data = removeHtml(data);
             return data;
         } catch (IOException e) {

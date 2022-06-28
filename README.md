@@ -5,6 +5,13 @@
     - Remain은 나머지 값
 - ex) ABCabc123456 은 A1a2B3b4C5c6
 
+# 개발환경
+- Spring Boot 2.5.3
+- Jsoup
+- Junit5
+- Swagger
+- Validation(SpringBoot)
+
 # Application 실행
 
 ``` bash
@@ -21,7 +28,7 @@ java -jar ./target/parsing-0.0.1-SNAPSHOT.jar;
 # Example1
 
 ### parameters
-- type: 1
+- type: REMOVE_HTML
 - unit: 100
 - url: http://localhost:8080
     
@@ -40,7 +47,7 @@ java -jar ./target/parsing-0.0.1-SNAPSHOT.jar;
 # Example2
 
 ### parameters
-- type: 2
+- type: ALL_TEXT
 - unit: 50
 - url: http://wrongurl.ccom
 
@@ -56,10 +63,8 @@ java -jar ./target/parsing-0.0.1-SNAPSHOT.jar;
 }
 ```
 
-
 # 구현방법
-- [핵심 기능 구현 Class](https://github.com/Pawer0223/url_parsing_api/blob/main/src/main/java/com/example/parsing/utils/ParsingUtils.java)
-- Jsoup 라이브러리를 사용하여 입력 URL 요청 및 Html태그 제거 기능 처리
-    - `getUrlDataJsoup(String url)`
-- 결과 데이터를 규칙에 맞게 오름차순 정렬 및 교차하여 문자열 생성
-    - `parsing(String data, int type)`
+- Jsoup 라이브러리를 사용하여 입력 URL 요청 및 Html태그 제거
+- 결과 데이터 Parsing
+    - [DataParser.java](https://github.com/Pawer0223/url_parsing_api/blob/main/src/main/java/com/example/parsing/utils/DataParser.java)
+  

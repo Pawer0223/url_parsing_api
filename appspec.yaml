@@ -2,8 +2,8 @@ version: 0.0
 os: linux
 files:
 	- source: /
-  	destination: /home/ec2-user/github_action
-	overwrite: yes
+	  destination: /home/ec2-user/github_action
+	  overwrite: yes
 
 permissions:
 	- object: /

@@ -1,6 +1,6 @@
 #!/bin/bash
 PROJECT_NAME="github_action"
-JAR_PATH="/home/ec2-user/github_action/target/libs/*.jar"
+JAR_PATH="/home/ec2-user/github_action/target/*.jar"
 DEPLOY_PATH=/home/ec2-user/$PROJECT_NAME/
 DEPLOY_LOG_PATH="/home/ec2-user/$PROJECT_NAME/deploy.log"
 DEPLOY_ERR_LOG_PATH="/home/ec2-user/$PROJECT_NAME/deploy_err.log"
